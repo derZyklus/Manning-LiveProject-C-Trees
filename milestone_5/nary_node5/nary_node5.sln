@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "nary_node5", "nary_node5.csproj", "{AB891E10-0792-4258-997E-8545B57BABA2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AB891E10-0792-4258-997E-8545B57BABA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB891E10-0792-4258-997E-8545B57BABA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB891E10-0792-4258-997E-8545B57BABA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB891E10-0792-4258-997E-8545B57BABA2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {75BF1761-C1FF-4AFD-8B56-C1774D98D24F}
+	EndGlobalSection
+EndGlobal
