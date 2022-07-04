@@ -173,11 +173,6 @@ public class BinaryNode<T>
 
         // ..
 
-        if (Value.Equals("C"))
-        {
-            var ttt = "Hallo Ingo";
-        }
-
         // If the node has no children, just place it here and return.
         if (LeftChild == null && RightChild == null)
         {
@@ -200,7 +195,6 @@ public class BinaryNode<T>
 
             // ...
             LeftChild.ArrangeSubtree(childXmin, childYmin);
-            
             childXmin += (NODE_RADIUS * 2);
 
             // If eh also have a right child,
@@ -209,7 +203,7 @@ public class BinaryNode<T>
             // ...
             if (RightChild != null)
             {
-                childXmin += X_SPACING;
+                childXmin += LeftChild.SubtreeBounds.Width;
             }
         }
 
@@ -219,11 +213,6 @@ public class BinaryNode<T>
 
             // ...
             RightChild.ArrangeSubtree(childXmin, childYmin);
-        }
-
-        if (Value.Equals("C"))
-        {
-            var ttt = "Hallo Ingo";
         }
 
         // Arrange this node depending on the number of children.
@@ -237,29 +226,21 @@ public class BinaryNode<T>
             var maxChildHight = LeftChild.SubtreeBounds.Height > RightChild.SubtreeBounds.Height ? LeftChild.SubtreeBounds.Height : RightChild.SubtreeBounds.Height;
             var height = (2*NODE_RADIUS) + Y_SPACING + maxChildHight;
 
-            SubtreeBounds = new Rect(xmin, xmin, width, height);
+            SubtreeBounds = new Rect(xmin, ymin, width, height);
             Center = new Point(xmin + (width / 2), ymin + NODE_RADIUS);
         }
         else if (LeftChild != null)
         {
             // We have only a left child
-
-            // ...
             var width = LeftChild.SubtreeBounds.Width;
             var height = LeftChild.SubtreeBounds.Height + Y_SPACING + (2*NODE_RADIUS);
 
             SubtreeBounds = new Rect(xmin, ymin, width, height);
             Center = new Point(xmin + (width / 2), ymin + NODE_RADIUS);
         }
-        else
+        else 
         {
             // We have only a right child.
-
-            // ..
-
-            //Center = new Point(xmin + NODE_RADIUS, ymin + NODE_RADIUS);
-            //SubtreeBounds = new Rect(xmin, ymin, NODE_RADIUS * 2, NODE_RADIUS * 2);
-
             var width = RightChild.SubtreeBounds.Width;
             var height = RightChild.SubtreeBounds.Height + Y_SPACING + (2 * NODE_RADIUS);
 
@@ -270,7 +251,11 @@ public class BinaryNode<T>
 
     private void DrawSubtreeLinks(Canvas canvas)
     {
-        if (LeftChild != null) canvas.DrawLine(Center, LeftChild.Center, new SolidColorBrush(Colors.Blue), 1);
+        if (LeftChild != null)
+        {
+            canvas.DrawLine(Center, LeftChild.Center, new SolidColorBrush(Colors.Blue), 1);
+        }
+            
 
         if (RightChild != null) canvas.DrawLine(Center, RightChild.Center, new SolidColorBrush(Colors.Blue), 1);
 
@@ -295,7 +280,7 @@ public class BinaryNode<T>
         var nodeSize = new Size(NODE_RADIUS * 2, NODE_RADIUS * 2);
         var nodeRect = new Rect(nodeTopLeftPoint, nodeSize);
 
-        canvas.DrawEllipse(nodeRect, Brushes.Transparent, Brushes.Green, 1);
+        canvas.DrawEllipse(nodeRect, Brushes.White, Brushes.Green, 1);
 
         canvas.DrawLabel(nodeRect, this.Value, Brushes.Transparent, Brushes.Red, HorizontalAlignment.Center,
             VerticalAlignment.Center, 15, 0);
