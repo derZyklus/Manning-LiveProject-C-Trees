@@ -113,11 +113,6 @@ public class NaryNode<T>
 
     private void ArrangeSubtree(double xmin, double ymin)
     {
-        if (Value.Equals("G"))
-        {
-            var aaa = "Hallo";
-        }
-
         if (Children.Count == 0)
         {
             Center = new Point(xmin + NODE_RADIUS, ymin + NODE_RADIUS);
@@ -143,21 +138,13 @@ public class NaryNode<T>
             // Update child_xmin to allow room for the subtree
             // and space between the subtrees.
             child_xmin += X_SPACING;
-
             child_xmin += child.SubtreeBounds.Width;
-            var bbb = child.SubtreeBounds;
+
             // Update the subtree bottom ymax.
             ymax = child.SubtreeBounds.Bottom > ymax ? child.SubtreeBounds.Bottom : ymax;
         }
 
-
-
-        if (Value.Equals("D"))
-        {
-            var aaa = "Hallo";
-        }
-
-        double xmax = child_xmin - X_SPACING;
+        var xmax = child_xmin - X_SPACING;
         SubtreeBounds = new Rect(xmin, ymin, xmax-xmin, ymax-ymin);
         Center = new Point(xmin + ((xmax - xmin)/2), ymin + NODE_RADIUS);
     }
@@ -166,11 +153,28 @@ public class NaryNode<T>
     {
         if (Children.Count == 1)
         {
-            // ...
+            canvas.DrawLine(Center, Children[0].Center, Brushes.Green, 1);
             Children[0].DrawSubtreeLinks(canvas);
         }
         else if(Children.Count > 0)
         {
+            // Find the Y coordinate of the center
+            // halfway to the children.
+            var yHalfwayOfCenter = (Children[0].Center.Y - Center.Y)/2;
+            
+            // Draw the vertical line to the center line.
+            canvas.DrawLine(Center, new Point(Center.X, Center.Y + yHalfwayOfCenter), Brushes.Green, 1);
+
+            // Draw the horizontal center line over the children.
+            var startHorizontalLine = new Point(Children[0].Center.X, Center.Y + yHalfwayOfCenter);
+            var endHorizontalLine = new Point(Children.Last().Center.X, Center.Y + yHalfwayOfCenter);
+            canvas.DrawLine(startHorizontalLine, endHorizontalLine, Brushes.Green, 1);
+
+            // Draw lines from the center line to the children.
+            foreach (var child in Children)
+            {
+                canvas.DrawLine(child.Center, new Point(child.Center.X, child.Center.Y - yHalfwayOfCenter), Brushes.Green, 1);
+            }
 
             foreach (var child in Children)
             {
@@ -178,11 +182,6 @@ public class NaryNode<T>
             }
         }
 
-        //if (!Value.Equals("G") && !Value.Equals("A"))
-        //{
-        //    var aaa = "Hallo";
-        //    return;
-        //}
         canvas.DrawRectangle(SubtreeBounds, null, Brushes.Red, 1);
     }
 
