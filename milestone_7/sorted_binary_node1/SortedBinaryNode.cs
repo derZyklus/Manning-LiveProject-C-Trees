@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -7,13 +8,13 @@ using System.Windows.Media;
 
 namespace sorted_binary_node1;
 
-public class BinaryNode<T>
+public class SortedBinaryNode<T> where T : IComparable<T>
 {
     #region Properties
 
     public Point Center { get; private set; }
-    public BinaryNode<T> LeftChild { get; private set; }
-    public BinaryNode<T> RightChild { get; private set; }
+    public SortedBinaryNode<T> LeftChild { get; private set; }
+    public SortedBinaryNode<T> RightChild { get; private set; }
     public Rect SubtreeBounds { get; private set; }
     public T Value { get; set; }
 
@@ -25,48 +26,34 @@ public class BinaryNode<T>
     private const double X_SPACING = 20.0;
     private const double Y_SPACING = 30.0;
 
-    public BinaryNode(T value)
+    public SortedBinaryNode(T value)
     {
         Value = value;
         LeftChild = null;
         RightChild = null;
     }
 
-    public void AddLeft(BinaryNode<T> leftChild)
+    public SortedBinaryNode<T> FindNode(T targetValue)
     {
-        LeftChild = leftChild;
-    }
+        if (targetValue.CompareTo(Value) == 0) return this;
 
-    public void AddRight(BinaryNode<T> rightChild)
-    {
-        RightChild = rightChild;
-    }
-
-    public BinaryNode<T> FindNode(T targetValue)
-    {
-        if (Value.Equals(targetValue))
-            return this;
-
-        if (LeftChild != null)
+        if (targetValue.CompareTo(Value) < 0)
         {
-            var resultFindLeft = LeftChild.FindNode(targetValue);
-            if (resultFindLeft != null)
-                return resultFindLeft;
+            if(LeftChild != null)
+                return LeftChild.FindNode(targetValue);
         }
-
-        if (RightChild != null)
+        else
         {
-            var resultFindRight = RightChild.FindNode(targetValue);
-            if (resultFindRight != null)
-                return resultFindRight;
+            if (RightChild != null)
+                return RightChild.FindNode(targetValue);
         }
 
         return null;
     }
 
-    public IEnumerable<BinaryNode<T>> TraversePreorder()
+    public IEnumerable<SortedBinaryNode<T>> TraversePreorder()
     {
-        var result = new List<BinaryNode<T>>();
+        var result = new List<SortedBinaryNode<T>>();
 
         result.Add(this);
 
@@ -79,9 +66,9 @@ public class BinaryNode<T>
         return result;
     }
 
-    public IEnumerable<BinaryNode<T>> TraverseInorder()
+    public IEnumerable<SortedBinaryNode<T>> TraverseInorder()
     {
-        var result = new List<BinaryNode<T>>();
+        var result = new List<SortedBinaryNode<T>>();
 
         if (LeftChild != null)
             result.AddRange(LeftChild.TraverseInorder());
@@ -94,9 +81,9 @@ public class BinaryNode<T>
         return result;
     }
 
-    public IEnumerable<BinaryNode<T>> TraversePostorder()
+    public IEnumerable<SortedBinaryNode<T>> TraversePostorder()
     {
-        var result = new List<BinaryNode<T>>();
+        var result = new List<SortedBinaryNode<T>>();
 
         if (LeftChild != null)
             result.AddRange(LeftChild.TraversePostorder());
@@ -109,10 +96,10 @@ public class BinaryNode<T>
         return result;
     }
 
-    public IEnumerable<BinaryNode<T>> TraverseBreadthFirst()
+    public IEnumerable<SortedBinaryNode<T>> TraverseBreadthFirst()
     {
-        var result = new List<BinaryNode<T>>();
-        var queue = new Queue<BinaryNode<T>>();
+        var result = new List<SortedBinaryNode<T>>();
+        var queue = new Queue<SortedBinaryNode<T>>();
 
         queue.Enqueue(this);
 
@@ -257,9 +244,10 @@ public class BinaryNode<T>
 
         if (RightChild != null) canvas.DrawLine(Center, RightChild.Center, new SolidColorBrush(Colors.Blue), 1);
 
-        canvas.DrawRectangle(SubtreeBounds,
-            new SolidColorBrush(Colors.Transparent),
-            new SolidColorBrush(Colors.Red), 1);
+
+        //canvas.DrawRectangle(SubtreeBounds,
+        //    new SolidColorBrush(Colors.Transparent),
+        //    new SolidColorBrush(Colors.Red), 1);
 
         if (LeftChild != null)
         {
@@ -291,6 +279,38 @@ public class BinaryNode<T>
         if (RightChild != null)
         {
             RightChild.DrawSubtreeNodes(canvas);
+        }
+    }
+
+
+    public void AddNode(SortedBinaryNode<T> node)
+    {
+        if(node == null)
+            return;
+
+        if (node.Value.CompareTo(this.Value) == 0)
+            throw new ArgumentException("Value is already in the tree.");
+
+        if (node.Value.CompareTo(this.Value) < 0)
+        {
+            if (this.LeftChild == null)
+            {
+                LeftChild = node;
+            }
+            else
+            {
+                LeftChild.AddNode(node);
+            }
+            return;
+        }
+
+        if (this.RightChild == null)
+        {
+            RightChild = node;
+        }
+        else
+        {
+            RightChild.AddNode(node);
         }
     }
 }
